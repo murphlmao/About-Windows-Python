@@ -38,6 +38,11 @@ class Registry_Shit:
                 continue
         return software_list
 
+    @staticmethod
+    def Network_RegistryKeys():
+        # HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces
+        pass
+
 class Printing_Shkabang: # printing class
     def __init__(self) -> None:
         # HKEY_LM_32 = SoftKeys(winreg.HKEY_LOCAL_MACHINE, winreg.KEY_WOW64_32KEY)
@@ -48,13 +53,13 @@ class Printing_Shkabang: # printing class
         self.HKEY_LM64 = SoftKeys(winreg.HKEY_LOCAL_MACHINE, winreg.KEY_WOW64_64KEY)
         self.HKEY_CU0 = SoftKeys(winreg.HKEY_CURRENT_USER, 0)
 
-    def list_software(self):
+    def list_softwareReg(self):
         software_list = self.HKEY_LM32 + self.HKEY_LM64 + self.HKEY_CU0 # array of dicts to find all established software in registry
         software_list.sort(key=Alph_Order) # alphabetical order bc easier to read lol
-        software_file = open("software_RegList.ini", "w")
-        driver_file = open("driver_RegList.ini", "w")
-        drivers_list = ["Intel(R)", "Python", "Runtime", "C++", "Driver", "Service"]
-        drivers_providers = ["Intel Corporation"]
+        software_file = open("exports\software_RegList.ini", "w") # export file // MAY BE A WAY TO PORT SOME OF THIS INTO A FUNCTION FOR AUTOMATION IN THE FUTURE
+        driver_file = open("exports\driver_RegList.ini", "w") # export file 
+        drivers_list = ["Intel(R)", "Python", "Runtime", "C++", "Driver", "Service"] # wordlist to distinguish drivers from actual software
+        drivers_providers = ["Intel Corporation"] # providers/publishers for drivers. likely to be some edge cases
 
         for software in software_list:
             print(f"Name: {software['name']}\nVersion: {software['version']}\nPublisher: {software['publisher']}\n----------")
@@ -70,6 +75,10 @@ class Printing_Shkabang: # printing class
         
         print(f"Number of installed apps: {len(software_list)}")
 
+    def list_networkReg(self):
+        pass
+
+
 if __name__ == "__main__":
     DoTheThing = Printing_Shkabang()
-    DoTheThing.list_software()
+    DoTheThing.list_softwareReg()
