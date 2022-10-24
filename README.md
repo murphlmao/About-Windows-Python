@@ -4,6 +4,12 @@ Work in progress project to be able to find practically any Windows setting (and
 Solo, hobby project.  
 
 
+Todo:
+
+refactor to inherit base class
+sign remote
+figure out hardware shit
+
 Shit to add: 
 
 Network config (IPs and shit)

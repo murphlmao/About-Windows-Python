@@ -1,4 +1,7 @@
-import winreg
+import winreg, psutil, pprint, os
+
+pp = pprint.PrettyPrinter(depth=1)
+
 
 # alphabetical ordurrrrr
 def Alph_Order(e):
@@ -41,6 +44,21 @@ class Registry_Shit:
     @staticmethod
     def Network_RegistryKeys():
         # HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces
+        inet_connections = psutil.net_if_addrs() # [0]
+        inet_connections_keys = inet_connections.keys() # [1], keys only of key/value pair
+        sign_remote = os.system("Set-ExecutionPolicy RemoteSigned")
+        netsh_wlan_profiles = os.system("netsh wlan show profiles") # [2]
+
+
+        return inet_connections, inet_connections_keys, netsh_wlan_profiles, sign_remote
+
+    @staticmethod
+    def Hardware_Utils():
+        pass
+
+    @staticmethod
+    def Users_Utils():
+        psutil.users()
         pass
 
 class Printing_Shkabang: # printing class
@@ -48,10 +66,14 @@ class Printing_Shkabang: # printing class
         # HKEY_LM_32 = SoftKeys(winreg.HKEY_LOCAL_MACHINE, winreg.KEY_WOW64_32KEY)
         # HKEY_LM_64 = SoftKeys(winreg.HKEY_LOCAL_MACHINE, winreg.KEY_WOW64_64KEY)
         # HKEY_CU_0 = SoftKeys(winreg.HKEY_CURRENT_USER, 0)
+        # software block
         SoftKeys = Registry_Shit.Software_RegistryKeys
         self.HKEY_LM32 = SoftKeys(winreg.HKEY_CURRENT_USER, 0)
         self.HKEY_LM64 = SoftKeys(winreg.HKEY_LOCAL_MACHINE, winreg.KEY_WOW64_64KEY)
         self.HKEY_CU0 = SoftKeys(winreg.HKEY_CURRENT_USER, 0)
+        
+        # network block
+        self.NetKeys = Registry_Shit.Network_RegistryKeys
 
     def list_softwareReg(self):
         software_list = self.HKEY_LM32 + self.HKEY_LM64 + self.HKEY_CU0 # array of dicts to find all established software in registry
@@ -76,9 +98,18 @@ class Printing_Shkabang: # printing class
         print(f"Number of installed apps: {len(software_list)}")
 
     def list_networkReg(self):
+        test_addr = self.NetKeys()
+        pp.pprint(test_addr[0])
+
+    def list_hardwareSpec(self):
+        # psutils shit
+        logical_processor_count = psutil.cpu_count()
         pass
 
 
 if __name__ == "__main__":
     DoTheThing = Printing_Shkabang()
+
     DoTheThing.list_softwareReg()
+
+    DoTheThing.list_networkReg()
