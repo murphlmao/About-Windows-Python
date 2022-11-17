@@ -1,7 +1,14 @@
-import winreg, psutil, pprint, os
+import winreg, psutil, pprint, os, argparse
 
+p = argparse.ArgumentParser(add_help=False)
+pa = p.add_argument
 pp = pprint.PrettyPrinter(depth=1)
 
+pa("-s", "--software", action='store_true')
+pa("-n", "--network", action='store_true')
+pa("-d", "--drivers", action='store_true')
+pa("-h", "--hardware", action='store_true')
+args = p.parse_args()
 
 # alphabetical ordurrrrr
 def Alph_Order(e):
@@ -108,8 +115,17 @@ class Printing_Shkabang: # printing class
 
 
 if __name__ == "__main__":
+
     DoTheThing = Printing_Shkabang()
 
-    DoTheThing.list_softwareReg()
+    if args.software:
+        DoTheThing.list_softwareReg()
+    
+    if args.network:
+        DoTheThing.list_networkReg()
+    
+    if args.drivers:
+        DoTheThing.list_softwareReg()
 
-    DoTheThing.list_networkReg()
+    if args.hardware:
+        DoTheThing.list_softwareReg()
